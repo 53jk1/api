@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha512-MoRNloxbStBcD8z3M/2BmnT+rg4IsMxPkXaGh2zD6LGNNFE80W3onsAhRcMAMrSoyWL9xD7Ert0men7vR8LUZg==" crossorigin="anonymous" />
+    <title>API Test</title>
+  </head>
+  <body>
+    <div class="container">
+      <form style="margin-top: 12px">
+        <div class="form-group">
+          <label for="address">API address and endpoint</label>
+          <input type="text" class="form-control" id="address" required placeholder="https://catfact.ninja/fact">
+        </div>
+        <button id="submit" type="submit" class="btn btn-primary">Get API data</button>
+      </form>
+
+      <pre id="result" style="margin-top: 12px; border: 1px solid rgba(0,0,0,.15); padding: 12px"></pre>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+
+    <script>
+        $(function() {
+            $('#address').val(localStorage.getItem('address'));
+
+            $('#submit').on('click', function(event) {
+                var address = $('#address').val();
+                if (!address) {
+                    return;
+                }
+
+                event.preventDefault();
+            });
+
+
+            function getData(address) {
+                var headers = {};
+
+                $.ajax({
+                    method: 'get',
+                    url: address,
+                    headers: headers
+                })
+                  .done(function(data, textStatus, jqXHR) {
+                      $('#result').text(jqXHR.responseText);
+                      localStorage.setItem('address', address);
+                  })
+                  .fail(function(jqXHR, textStatus) {
+                      $('#result').text('Failed to get data (' + jqXHR.status + ')');
+                  });
+            }
+        });
+    </script>
+  </body>
+</html>
